@@ -19,7 +19,7 @@ class SplashActivity : AppCompatActivity() {
         val intent = Intent( this, LoginActivity::class.java);
         Handler().postDelayed( {
             intent.change()
-        },  2000)
+        },  5000)
     }
     fun Intent.change() {
         startActivity(this)
