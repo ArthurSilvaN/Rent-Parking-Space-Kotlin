@@ -1,9 +1,10 @@
-package com.example.rps_rentparkingspace
+package com.example.rps_rentparkingspace.ui.login
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.content.Intent
 import android.os.Handler
+import com.example.rps_rentparkingspace.R
 
 
 @Suppress("DEPRECATION")
@@ -24,5 +25,4 @@ class SplashActivity : AppCompatActivity() {
         startActivity(this)
         finish()
     }
-
 }
