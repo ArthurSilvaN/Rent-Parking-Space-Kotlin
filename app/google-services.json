@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1037260411394",
+    "firebase_url": "https://rps-app-47bcf-default-rtdb.firebaseio.com",
+    "project_id": "rps-app-47bcf",
+    "storage_bucket": "rps-app-47bcf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1037260411394:android:4180e191f6c6488963cd1b",
+        "android_client_info": {
+          "package_name": "com.example.rps_rentparkingspace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1037260411394-rv1de2e49tm593kopgenfnqoph1ptv4j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB5A_dNXFrvr-UaSdQd1qaTl5XkM8XLY6A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1037260411394-rv1de2e49tm593kopgenfnqoph1ptv4j.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
