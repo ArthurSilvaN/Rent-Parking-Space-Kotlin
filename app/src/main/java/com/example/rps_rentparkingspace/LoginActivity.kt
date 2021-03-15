@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth
 class LoginActivity : AppCompatActivity() {
 
     private val TAG = "LoginActivity"
-
     //global variables
     private var email: String? = null
     private var password: String? = null
@@ -53,16 +52,15 @@ class LoginActivity : AppCompatActivity() {
     private fun initialise() {
         tvForgotPassword = findViewById<View>(R.id.forgotPass) as TextView
         etEmail = findViewById<View>(R.id.email) as EditText
-        etPassword = findViewById<View>(R.id.et_password) as EditText
+        etPassword = findViewById<View>(R.id.password) as EditText
         btnLogin = findViewById<View>(R.id.signIn) as Button
         btnCreateAccount = findViewById<View>(R.id.registerUser) as Button
         mProgressBar = ProgressDialog(this)
         mAuth = FirebaseAuth.getInstance()
         tvForgotPassword!!
-            .setOnClickListener { startActivity(Intent(this@LoginActivity, ForgotPassActivity::class.java)) }
+                .setOnClickListener { startActivity(Intent(this@LoginActivity, ForgotPassActivity::class.java)) }
         btnCreateAccount!!
-            .setOnClickListener { startActivity(Intent(this@LoginActivity,
-                RegisterActivity::class.java)) }
+                .setOnClickListener { startActivity(Intent(this@LoginActivity, RegisterActivity::class.java)) }
         btnLogin!!.setOnClickListener { loginUser() }
     }
 
@@ -75,19 +73,19 @@ class LoginActivity : AppCompatActivity() {
             mProgressBar!!.show()
             Log.d(TAG, "Logging in user.")
             mAuth!!.signInWithEmailAndPassword(email!!, password!!)
-                .addOnCompleteListener(this) { task ->
-                    mProgressBar!!.hide()
-                    if (task.isSuccessful) {
-                        // Sign in success, update UI with signed-in user's information
-                        Log.d(TAG, "signInWithEmail:success")
-                        updateUI()
-                    } else {
-                        // If sign in fails, display a message to the user.
-                        Log.e(TAG, "signInWithEmail:failure", task.exception)
-                        Toast.makeText(this@LoginActivity, "Authentication failed.",
-                            Toast.LENGTH_SHORT).show()
+                    .addOnCompleteListener(this) { task ->
+                        mProgressBar!!.hide()
+                        if (task.isSuccessful) {
+                            // Sign in success, update UI with signed-in user's information
+                            Log.d(TAG, "signInWithEmail:success")
+                            updateUI()
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.e(TAG, "signInWithEmail:failure", task.exception)
+                            Toast.makeText(this@LoginActivity, "Authentication failed.",
+                                    Toast.LENGTH_SHORT).show()
+                        }
                     }
-                }
         } else {
             Toast.makeText(this, "Enter all details", Toast.LENGTH_SHORT).show()
         }

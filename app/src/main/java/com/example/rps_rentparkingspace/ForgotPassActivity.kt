@@ -11,7 +11,7 @@ import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 
-class ForgotPasswordActivity : AppCompatActivity() {
+class ForgotPassActivity : AppCompatActivity() {
 
     private val TAG = "ForgotPasswordActivity"
     //UI elements
@@ -56,14 +56,8 @@ class ForgotPasswordActivity : AppCompatActivity() {
         }
     }
     private fun updateUI() {
-        val intent = Intent(this@ForgotPasswordActivity, LoginActivity::class.java)
+        val intent = Intent(this@ForgotPassActivity, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         startActivity(intent)
-    }
-}
-
-class ForgotPassActivity : AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 }
