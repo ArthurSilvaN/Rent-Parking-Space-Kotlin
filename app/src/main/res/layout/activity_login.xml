@@ -146,4 +146,14 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/iconrps"
+        tools:layout_editor_absoluteY="-1dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
