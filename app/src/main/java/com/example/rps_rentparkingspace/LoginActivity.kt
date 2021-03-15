@@ -2,6 +2,7 @@ package com.example.rps_rentparkingspace
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
@@ -36,7 +37,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setStatusBarColorTo(R.color.colorPrimary)
+            window.setStatusBarColorTo(R.color.colorSecundary)
         }
 
         initialise ()
@@ -69,7 +70,7 @@ class LoginActivity : AppCompatActivity() {
         email = etEmail?.text.toString()
         password = etPassword?.text.toString()
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            mProgressBar!!.setMessage("Registering User...")
+            mProgressBar!!.setMessage("Logging in user...")
             mProgressBar!!.show()
             Log.d(TAG, "Logging in user.")
             mAuth!!.signInWithEmailAndPassword(email!!, password!!)
@@ -93,6 +94,7 @@ class LoginActivity : AppCompatActivity() {
     private fun updateUI() {
         val intent = Intent(this@LoginActivity, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
         startActivity(intent)
     }
 }

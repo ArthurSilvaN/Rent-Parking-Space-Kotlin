@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/container"
+    android:screenOrientation="portrait"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
@@ -10,6 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:ignore="LockedOrientationActivity"
     tools:context=".LoginActivity">
 
     <EditText
@@ -154,6 +156,8 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@mipmap/iconrps"
-        tools:layout_editor_absoluteY="-1dp" />
+        tools:layout_editor_absoluteY="-1dp"
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/todo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
