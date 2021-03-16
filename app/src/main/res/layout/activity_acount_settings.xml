@@ -18,6 +18,7 @@
         android:visibility="visible">
 
         <ImageView
+            android:id="@+id/imgUser"
             android:layout_width="match_parent"
             android:layout_height="161dp"
             android:layout_alignParentBottom="true"
@@ -30,7 +31,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <ImageView
-            android:id="@+id/imageView5"
+            android:id="@+id/editImg"
             android:layout_width="193dp"
             android:layout_height="99dp"
             android:layout_alignParentStart="true"
@@ -100,7 +101,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/rpsScreen"
+                android:id="@+id/firstName"
                 android:layout_width="212dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -132,7 +133,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/addBalanceScreen"
+                android:id="@+id/lastName"
                 android:layout_width="212dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -151,7 +152,7 @@
 
             <TextView
                 android:id="@+id/textView7"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:drawablePadding="16dp"
@@ -163,12 +164,14 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/spacesScreen"
+                android:id="@+id/emailUser"
                 android:layout_width="212dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
                 android:drawablePadding="16dp"
                 android:gravity="start"
+                android:maxLines="1"
+                android:minLines="1"
                 android:padding="10dp"
                 android:text="@string/yourSpaces"
                 android:textAllCaps="false"
@@ -194,7 +197,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/accountSettingsScreen"
+                android:id="@+id/addBalanceUser"
                 android:layout_width="212dp"
                 android:layout_height="match_parent"
                 android:clickable="true"
@@ -225,7 +228,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/logOut"
+                android:id="@+id/passwordUser"
                 android:layout_width="213dp"
                 android:layout_height="match_parent"
                 android:clickable="true"

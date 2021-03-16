@@ -87,6 +87,7 @@ class RegisterActivity : AppCompatActivity() {
                     currentUserDb.child("firstName").setValue(firstName)
                     currentUserDb.child("lastName").setValue(lastName)
                     currentUserDb.child("email").setValue(email)
+                    currentUserDb.child("password").setValue(password)
                     updateUserInfoAndUI()
                 } else {
                     // If sign in fails, display a message to the user.

@@ -35,11 +35,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun initialise() {
         etNameUser = findViewById<View>(R.id.nameUser) as TextView
-        tvRpsScrenn = findViewById<View>(R.id.rpsScreen) as TextView
-        tvAccountSetings = findViewById<View>(R.id.accountSettingsScreen) as TextView
-        tvAddBalanceScreen = findViewById<View>(R.id.addBalanceScreen) as TextView
-        tvLogOut = findViewById<View>(R.id.logOut) as TextView
-        tvSpacesScreen = findViewById<View>(R.id.spacesScreen) as TextView
+        tvRpsScrenn = findViewById<View>(R.id.firstName) as TextView
+        tvAccountSetings = findViewById<View>(R.id.addBalanceUser) as TextView
+        tvAddBalanceScreen = findViewById<View>(R.id.lastName) as TextView
+        tvLogOut = findViewById<View>(R.id.passwordUser) as TextView
+        tvSpacesScreen = findViewById<View>(R.id.emailUser) as TextView
 
 
         var setName = findViewById<View>(R.id.nameUser) as TextView
