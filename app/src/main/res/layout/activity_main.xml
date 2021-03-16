@@ -8,112 +8,144 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
-        android:orientation="vertical"
-        android:padding="0dp"
-        android:layout_weight="2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@drawable/banner">
+        android:layout_weight="2"
+        android:background="@drawable/cover"
+        android:focusableInTouchMode="false"
+        android:orientation="vertical"
+        android:padding="0dp"
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:gravity="center_vertical">
-            <ImageView
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:padding="10dp"
-                tools:srcCompat="@tools:sample/avatars"/>
 
             <TextView
                 android:id="@+id/nameUser"
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
+                android:layout_gravity="center"
+                android:gravity="center|center_vertical"
                 android:padding="5dp"
                 android:text=""
-                android:textAllCaps="false"
+                android:textAllCaps="true"
                 android:textColor="#fff"
                 android:textSize="22sp" />
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="39dp"
+            android:padding="10dp"
+            tools:srcCompat="@tools:sample/avatars" />
+
+        <TextView
+            android:id="@+id/balanceUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginEnd="1dp"
+            android:layout_marginRight="1dp"
+            android:layout_marginBottom="46dp"
+            android:gravity="center|center_vertical"
+            android:padding="5dp"
+            android:text="R$ 00.00,00"
+            android:textAllCaps="false"
+            android:textColor="#fff"
+            android:textSize="22sp" />
+
     </RelativeLayout>
 
     <LinearLayout
-        android:layout_weight="4"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="4"
+        android:background="@drawable/rectangle_1"
         android:orientation="vertical"
-        android:padding="10dp"
-        android:background="@drawable/rectangle_1">
+        android:padding="10dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Dashboard"
+            android:clickable="true"
             android:drawableLeft="@drawable/dashboard_icon"
-            android:textAllCaps="false"
             android:drawablePadding="16dp"
-            android:textSize="18sp"
             android:gravity="start"
-            android:clickable="true"
             android:padding="10dp"
-            android:textColor="#a6aff1"/>
+            android:text="@string/restSpaceParking"
+            android:textAllCaps="false"
+            android:textColor="#a6aff1"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Activity"
+            android:clickable="true"
             android:drawableLeft="@drawable/activity_icon"
-            android:textAllCaps="false"
             android:drawablePadding="16dp"
-            android:textSize="18sp"
             android:gravity="start"
-            android:clickable="true"
             android:padding="10dp"
-            android:textColor="#a6aff1"/>
+            android:text="@string/money"
+            android:textAllCaps="false"
+            android:textColor="#a6aff1"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Tasks"
+            android:clickable="true"
             android:drawableLeft="@drawable/tasks_icon"
-            android:textAllCaps="false"
             android:drawablePadding="16dp"
-            android:textSize="18sp"
             android:gravity="start"
-            android:clickable="true"
             android:padding="10dp"
-            android:textColor="#a6aff1"/>
+            android:text="@string/yourSpaces"
+            android:textAllCaps="false"
+            android:textColor="#a6aff1"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Account settings"
+            android:clickable="true"
             android:drawableLeft="@drawable/settings_icon"
-            android:textAllCaps="false"
             android:drawablePadding="16dp"
-            android:textSize="18sp"
             android:gravity="start"
-            android:clickable="true"
             android:padding="10dp"
-            android:textColor="#a6aff1"/>
+            android:text="Account settings"
+            android:textAllCaps="false"
+            android:textColor="#a6aff1"
+            android:textSize="18sp" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Log out"
-            android:drawableLeft="@drawable/logout_icon"
-            android:textAllCaps="false"
-            android:drawablePadding="16dp"
-            android:textSize="18sp"
-            android:gravity="start"
             android:clickable="true"
+            android:drawableLeft="@drawable/logout_icon"
+            android:drawablePadding="16dp"
+            android:gravity="start"
             android:padding="10dp"
-            android:textColor="#a6aff1"/>
+            android:text="Log out"
+            android:textAllCaps="false"
+            android:textColor="#a6aff1"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_gravity="bottom|center|center_horizontal"
+            android:layout_margin="150dp"
+            android:background="@drawable/add"
+            android:baselineAligned="false"
+            android:clickable="true" />
     </LinearLayout>
+
 </LinearLayout>
