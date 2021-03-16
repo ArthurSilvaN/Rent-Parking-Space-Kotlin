@@ -86,6 +86,7 @@ class RegisterActivity : AppCompatActivity() {
                     val currentUserDb = mDatabaseReference!!.child(userId)
                     currentUserDb.child("firstName").setValue(firstName)
                     currentUserDb.child("lastName").setValue(lastName)
+                    currentUserDb.child("email").setValue(email)
                     updateUserInfoAndUI()
                 } else {
                     // If sign in fails, display a message to the user.

@@ -9,7 +9,11 @@
         android:roundIcon="@mipmap/iconrps"
         android:supportsRtl="true"
         android:theme="@style/Theme.RPSRentParkingSpace">
-        <activity android:name=".ForgotPassActivity"></activity>
+        <activity android:name=".menu.SpacesActivity"></activity>
+        <activity android:name=".menu.AddBalanceActivity" />
+        <activity android:name=".menu.AccountSettingsActivity" />
+        <activity android:name=".menu.RpsActivity" />
+        <activity android:name=".ForgotPassActivity" />
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />

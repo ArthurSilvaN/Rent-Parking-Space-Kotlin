@@ -74,6 +74,7 @@
         android:padding="10dp">
 
         <TextView
+            android:id="@+id/rpsScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -87,6 +88,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/addBalanceScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -100,6 +102,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/spacesScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -113,6 +116,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/accountSettingsScreen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -126,6 +130,7 @@
             android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/logOut"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
