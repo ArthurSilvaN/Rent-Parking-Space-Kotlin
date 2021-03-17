@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import com.example.rps_rentparkingspace.MainActivity
 import com.example.rps_rentparkingspace.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -21,7 +22,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.StorageReference
-import com.squareup.picasso.Picasso
 
 private val TAG = "AccountSettingsActivity"
 
@@ -55,7 +55,8 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_acount_settings)
 
-        var editIMG = findViewById<View>(R.id.editImg) as ImageView
+        var editIMG = findViewById<View>(R.id.editImg) as TextView
+        var ivBack = findViewById<View>(R.id.goBack) as ImageView
 
         var setName = findViewById<View>(R.id.firstName) as TextView
         nameUser = etNameUser?.text.toString()
@@ -94,6 +95,10 @@ class AccountSettingsActivity : AppCompatActivity() {
                 Log.d(TAG, databaseError.message)
             }
         }
+
+        ivBack!!
+            .setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
+
         uidRef.addListenerForSingleValueEvent(valueEventListener)
 
         editIMG!!
