@@ -1,6 +1,13 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.rps_rentparkingspace.menu
 
+import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Intent
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -13,8 +20,12 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 
 private val TAG = "AccountSettingsActivity"
+
+private var mProgressBar: ProgressDialog? = null
 
 
 private var etNameUser: TextView? = null
@@ -33,7 +44,12 @@ private var tvPassword: TextView? = null
 private var passwordUser: String? = null
 
 private var uploadImage: ImageView? = null
+private const val RequestCode = 438
+private var imageUri: Uri? = null
+private var storageRef: StorageReference? = null
 
+
+@Suppress("DEPRECATION")
 class AccountSettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,5 +95,34 @@ class AccountSettingsActivity : AppCompatActivity() {
             }
         }
         uidRef.addListenerForSingleValueEvent(valueEventListener)
+
+        editIMG!!
+            .setOnClickListener { pickImage() }
+    }
+
+    private fun pickImage(){
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, RequestCode)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == RequestCode && resultCode == RESULT_OK && data!!.data != null){
+            var imageUser = findViewById<View>(R.id.imgUser) as ImageView
+            imageUri = data.data
+
+            imageUser.setImageURI(imageUri)
+        }
+    }
+
+    private fun uploadToDataBase(){
+        mProgressBar = ProgressDialog(this)
+        mProgressBar!!.setMessage("image is uploading, please wait...")
+
+        if (imageUri!=null){
+        }
     }
 }
