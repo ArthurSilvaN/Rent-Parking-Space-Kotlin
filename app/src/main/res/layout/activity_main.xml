@@ -82,7 +82,7 @@
             android:drawablePadding="16dp"
             android:gravity="start"
             android:padding="10dp"
-            android:text="@string/restSpaceParking"
+            android:text="@string/rentSpaceParking"
             android:textAllCaps="false"
             android:textColor="#a6aff1"
             android:textSize="18sp" />

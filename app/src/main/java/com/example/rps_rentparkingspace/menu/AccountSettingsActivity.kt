@@ -2,18 +2,19 @@
 
 package com.example.rps_rentparkingspace.menu
 
-import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ContentResolver
 import android.content.Intent
-import android.icu.number.NumberFormatter.with
-import android.icu.number.NumberRangeFormatter.with
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.example.rps_rentparkingspace.MainActivity
 import com.example.rps_rentparkingspace.R
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +22,11 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.StorageTask
+
 
 private val TAG = "AccountSettingsActivity"
 
@@ -46,8 +51,9 @@ private var passwordUser: String? = null
 private var uploadImage: ImageView? = null
 private const val RequestCode = 438
 private var imageUri: Uri? = null
-private var storageRef: StorageReference? = null
 
+private var mUploadTask: StorageTask<*>? = null
+private var storageRef: StorageReference? = null
 
 @Suppress("DEPRECATION")
 class AccountSettingsActivity : AppCompatActivity() {
@@ -57,6 +63,7 @@ class AccountSettingsActivity : AppCompatActivity() {
 
         var editIMG = findViewById<View>(R.id.editImg) as TextView
         var ivBack = findViewById<View>(R.id.goBack) as ImageView
+        var tvSave = findViewById<View>(R.id.save) as TextView
 
         var setName = findViewById<View>(R.id.firstName) as TextView
         nameUser = etNameUser?.text.toString()
@@ -78,11 +85,11 @@ class AccountSettingsActivity : AppCompatActivity() {
         val uidRef = rootRef.child("Users").child(uid)
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                nameUser = """${dataSnapshot.child("firstName").getValue()}"""
-                lastNameUser = """${dataSnapshot.child("lastName").getValue()}"""
-                emailUser = """${dataSnapshot.child("email").getValue()}"""
-                balanceUser = """$ ${dataSnapshot.child("balance").getValue()}"""
-                passwordUser = """${dataSnapshot.child("password").getValue()}"""
+                nameUser = """${dataSnapshot.child("firstName").value}"""
+                lastNameUser = """${dataSnapshot.child("lastName").value}"""
+                emailUser = """${dataSnapshot.child("email").value}"""
+                balanceUser = """$ ${dataSnapshot.child("balance").value}"""
+                passwordUser = """${dataSnapshot.child("password").value}"""
 
                 setName.text = nameUser
                 setLastName.text = lastNameUser
@@ -95,14 +102,16 @@ class AccountSettingsActivity : AppCompatActivity() {
                 Log.d(TAG, databaseError.message)
             }
         }
-
-        ivBack!!
-            .setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
-
         uidRef.addListenerForSingleValueEvent(valueEventListener)
 
-        editIMG!!
+        ivBack
+            .setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
+
+        editIMG
             .setOnClickListener { pickImage() }
+
+        tvSave
+            .setOnClickListener { uploadFile() }
     }
 
     private fun pickImage(){
@@ -123,11 +132,48 @@ class AccountSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun uploadToDataBase(){
-        mProgressBar = ProgressDialog(this)
-        mProgressBar!!.setMessage("image is uploading, please wait...")
+    private fun getFileExtension(uri: Uri): String? {
+        val cR: ContentResolver = getContentResolver()
+        val mime: MimeTypeMap = MimeTypeMap.getSingleton()
+        return mime.getExtensionFromMimeType(cR.getType(uri))
+    }
 
-        if (imageUri!=null){
+    private fun uploadFile() {
+        var storage: FirebaseStorage
+        val storageRef: StorageReference = storage.reference
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val rootRef = FirebaseDatabase.getInstance().reference
+        val uidRef = rootRef.child("Users").child(uid)
+
+        if (imageUri != null) {
+            val fileReference = storageRef.child(
+                System.currentTimeMillis()
+                    .toString() + "." + getFileExtension(imageUri!!)
+            )
+                mUploadTask = fileReference.putFile(imageUri!!)
+                    ?.addOnSuccessListener { taskSnapshot ->
+                        val handler = Handler()
+                        handler.postDelayed(Runnable { mProgressBar!!.progress = 0 }, 500)
+                        Toast.makeText(this, "Upload successful", Toast.LENGTH_LONG).show()
+                        val upload = taskSnapshot.getMetadata()?.getReference()?.getDownloadUrl().toString()
+
+                        val uploadId: String? = uidRef.push().getKey()
+                        uploadId?.let { uidRef.child(it).setValue(upload) }
+                    }
+                    ?.addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            e.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                    .addOnProgressListener { taskSnapshot ->
+                        val progress =
+                            100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
+                        mProgressBar!!.progress = progress.toInt()
+                    }
+        } else {
+            Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show()
         }
     }
 }

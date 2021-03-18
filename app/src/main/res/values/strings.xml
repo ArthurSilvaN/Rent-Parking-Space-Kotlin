@@ -20,7 +20,7 @@
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
     <string name="reset_senha">Send recovery email</string>
-    <string name="restSpaceParking">Rest Space Parking</string>
+    <string name="rentSpaceParking">View Spaces Parking</string>
     <string name="money">Add Balance</string>
     <string name="yourSpaces">Your parking spaces</string>
     <string name="todo">TODO</string>

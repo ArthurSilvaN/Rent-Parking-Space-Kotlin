@@ -48,6 +48,20 @@
             android:textColor="#a6aff1"
             android:textSize="15sp" />
 
+        <TextView
+            android:id="@+id/save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginRight="24dp"
+            android:text="save"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp" />
+
     </RelativeLayout>
 
     <LinearLayout
