@@ -140,7 +140,7 @@ class AccountSettingsActivity : AppCompatActivity() {
 
     private fun uploadFile() {
         var storage: FirebaseStorage
-        val storageRef: StorageReference = storage.reference
+        storageRef = storage.reference
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
         val rootRef = FirebaseDatabase.getInstance().reference
         val uidRef = rootRef.child("Users").child(uid)
