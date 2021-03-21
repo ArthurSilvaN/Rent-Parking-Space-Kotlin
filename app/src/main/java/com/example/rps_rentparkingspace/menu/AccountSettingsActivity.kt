@@ -7,7 +7,6 @@ import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
 import android.view.View
 import android.webkit.MimeTypeMap
@@ -22,10 +21,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
+import com.google.firebase.storage.UploadTask
 
 
 private val TAG = "AccountSettingsActivity"
@@ -52,7 +50,7 @@ private var uploadImage: ImageView? = null
 private const val RequestCode = 438
 private var imageUri: Uri? = null
 
-private var mUploadTask: StorageTask<*>? = null
+private var taskSnapshot: UploadTask.TaskSnapshot? = null
 private var storageRef: StorageReference? = null
 
 @Suppress("DEPRECATION")
@@ -132,48 +130,25 @@ class AccountSettingsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFileExtension(uri: Uri): String? {
-        val cR: ContentResolver = getContentResolver()
-        val mime: MimeTypeMap = MimeTypeMap.getSingleton()
-        return mime.getExtensionFromMimeType(cR.getType(uri))
-    }
-
     private fun uploadFile() {
-        var storage: FirebaseStorage
-        storageRef = storage.reference
-        val uid = FirebaseAuth.getInstance().currentUser!!.uid
-        val rootRef = FirebaseDatabase.getInstance().reference
-        val uidRef = rootRef.child("Users").child(uid)
-
         if (imageUri != null) {
-            val fileReference = storageRef.child(
-                System.currentTimeMillis()
-                    .toString() + "." + getFileExtension(imageUri!!)
-            )
-                mUploadTask = fileReference.putFile(imageUri!!)
-                    ?.addOnSuccessListener { taskSnapshot ->
-                        val handler = Handler()
-                        handler.postDelayed(Runnable { mProgressBar!!.progress = 0 }, 500)
-                        Toast.makeText(this, "Upload successful", Toast.LENGTH_LONG).show()
-                        val upload = taskSnapshot.getMetadata()?.getReference()?.getDownloadUrl().toString()
+            mProgressBar?.setTitle("Uploading")
+            mProgressBar?.show()
+            val filepath : StorageReference = FirebaseStorage.getInstance().reference.child("images/${imageUri.toString()}.jpg")
+            filepath.putFile(imageUri!!).addOnSuccessListener(){
+                mProgressBar?.dismiss()
+                Toast.makeText(this, "File Uploaded", Toast.LENGTH_SHORT).show()
+            }.addOnFailureListener(){pO ->
+                mProgressBar?.dismiss()
+                Toast.makeText(applicationContext,pO.message, Toast.LENGTH_SHORT).show()
+            }.addOnProgressListener {pO ->
+                var progress : Double = (100.0 * pO.bytesTransferred)
+                mProgressBar?.setMessage("Uploaded ${progress.toInt()}%")
+            }
 
-                        val uploadId: String? = uidRef.push().getKey()
-                        uploadId?.let { uidRef.child(it).setValue(upload) }
-                    }
-                    ?.addOnFailureListener { e ->
-                        Toast.makeText(
-                            this,
-                            e.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-                    .addOnProgressListener { taskSnapshot ->
-                        val progress =
-                            100.0 * taskSnapshot.bytesTransferred / taskSnapshot.totalByteCount
-                        mProgressBar!!.progress = progress.toInt()
-                    }
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show()
         }
     }
 }
+
