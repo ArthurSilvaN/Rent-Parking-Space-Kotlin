@@ -14,10 +14,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rps_rentparkingspace.MainActivity
 import com.example.rps_rentparkingspace.R
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
 
 
@@ -47,6 +50,8 @@ private var passwordUser: String? = null
 
 private const val RequestCode = 438
 private var imageUri: Uri? = null
+private var coverChecker: String? = null
+private var storageRef: StorageReference? = null
 
 @Suppress("DEPRECATION")
 class AccountSettingsActivity : AppCompatActivity() {
@@ -127,8 +132,6 @@ class AccountSettingsActivity : AppCompatActivity() {
 
     private fun uploadFile() {
         if (imageUri != null) {
-
-
             //StorageFire
             mProgressBar?.setTitle("Uploading")
             mProgressBar?.show()
@@ -136,11 +139,7 @@ class AccountSettingsActivity : AppCompatActivity() {
             filepath.putFile(imageUri!!).addOnSuccessListener(){
                 mProgressBar?.dismiss()
                 Toast.makeText(this, "File Uploaded", Toast.LENGTH_SHORT).show()
-                //Database Upload Image
-                val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                val currentUserDb = mDatabaseReference!!.child(uid)
-                currentUserDb.child("profilePhoto").setValue("${imageUri.toString().trim()}.jpg")
-
+                uploadToDataBase()
             }.addOnFailureListener(){ pO ->
                 mProgressBar?.dismiss()
                 Toast.makeText(applicationContext, pO.message, Toast.LENGTH_SHORT).show()
@@ -151,6 +150,44 @@ class AccountSettingsActivity : AppCompatActivity() {
 
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun uploadToDataBase() {
+        Toast.makeText(this, "image is uploading, please wait...", Toast.LENGTH_SHORT).show()
+
+        if(imageUri != null){
+
+            val fileRef = storageRef!!.child(System.currentTimeMillis().toString() + ".jpg")
+
+            var uploadTask: StorageTask<*>
+            uploadTask = fileRef.putFile(imageUri!!)
+
+            uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>>{ task ->
+                if (!task.isSuccessful){
+                    task.exception?.let {
+                        throw it
+                    }
+                }
+                return@Continuation fileRef.downloadUrl
+            }).addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    val downloadUrl = task.result
+                    val url = downloadUrl.toString()
+
+                    if(coverChecker == "cover"){
+                        val mapCoverImg = HashMap<String, Any>()
+                        mapCoverImg["cover"] = url
+                        mDatabaseReference!!.updateChildren(mapCoverImg)
+                        coverChecker = ""
+                    }else{
+                        val mapCoverImg = HashMap<String, Any>()
+                        mapCoverImg["cover"] = url
+                        mDatabaseReference!!.updateChildren(mapCoverImg)
+                        coverChecker = ""
+                    }
+                }
+            }
         }
     }
 }
