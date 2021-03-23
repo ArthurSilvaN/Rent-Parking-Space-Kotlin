@@ -54,7 +54,6 @@ class MainActivity : AppCompatActivity() {
                 }  ${dataSnapshot.child("lastName").getValue()}"""
                 setName.text = nameUser
             }
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.d(TAG, databaseError.message)
             }

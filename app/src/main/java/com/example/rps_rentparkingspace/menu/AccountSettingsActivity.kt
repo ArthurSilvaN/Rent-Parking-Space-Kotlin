@@ -3,13 +3,11 @@
 package com.example.rps_rentparkingspace.menu
 
 import android.app.ProgressDialog
-import android.content.ContentResolver
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.webkit.MimeTypeMap
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -17,10 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.rps_rentparkingspace.MainActivity
 import com.example.rps_rentparkingspace.R
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -30,6 +25,10 @@ private val TAG = "AccountSettingsActivity"
 
 private var mProgressBar: ProgressDialog? = null
 
+//Firebase references
+private var mDatabaseReference: DatabaseReference? = null
+private var mDatabase: FirebaseDatabase? = null
+private var mAuth: FirebaseAuth? = null
 
 private var etNameUser: TextView? = null
 private var nameUser: String? = null
@@ -46,12 +45,8 @@ private var balanceUser: String? = null
 private var tvPassword: TextView? = null
 private var passwordUser: String? = null
 
-private var uploadImage: ImageView? = null
 private const val RequestCode = 438
 private var imageUri: Uri? = null
-
-private var taskSnapshot: UploadTask.TaskSnapshot? = null
-private var storageRef: StorageReference? = null
 
 @Suppress("DEPRECATION")
 class AccountSettingsActivity : AppCompatActivity() {
@@ -132,16 +127,24 @@ class AccountSettingsActivity : AppCompatActivity() {
 
     private fun uploadFile() {
         if (imageUri != null) {
+
+
+            //StorageFire
             mProgressBar?.setTitle("Uploading")
             mProgressBar?.show()
             val filepath : StorageReference = FirebaseStorage.getInstance().reference.child("images/${imageUri.toString()}.jpg")
             filepath.putFile(imageUri!!).addOnSuccessListener(){
                 mProgressBar?.dismiss()
                 Toast.makeText(this, "File Uploaded", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener(){pO ->
+                //Database Upload Image
+                val uid = FirebaseAuth.getInstance().currentUser!!.uid
+                val currentUserDb = mDatabaseReference!!.child(uid)
+                currentUserDb.child("profilePhoto").setValue("${imageUri.toString().trim()}.jpg")
+
+            }.addOnFailureListener(){ pO ->
                 mProgressBar?.dismiss()
-                Toast.makeText(applicationContext,pO.message, Toast.LENGTH_SHORT).show()
-            }.addOnProgressListener {pO ->
+                Toast.makeText(applicationContext, pO.message, Toast.LENGTH_SHORT).show()
+            }.addOnProgressListener { pO ->
                 var progress : Double = (100.0 * pO.bytesTransferred)
                 mProgressBar?.setMessage("Uploaded ${progress.toInt()}%")
             }
