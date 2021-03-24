@@ -22,6 +22,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.StorageTask
 import com.google.firebase.storage.UploadTask
+import java.lang.System.currentTimeMillis
 
 
 private val TAG = "AccountSettingsActivity"
@@ -103,16 +104,16 @@ class AccountSettingsActivity : AppCompatActivity() {
         uidRef.addListenerForSingleValueEvent(valueEventListener)
 
         ivBack
-            .setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
+                .setOnClickListener { startActivity(Intent(this, MainActivity::class.java)) }
 
         editIMG
-            .setOnClickListener { pickImage() }
+                .setOnClickListener { pickImage() }
 
         tvSave
-            .setOnClickListener { uploadFile() }
+                .setOnClickListener { uploadFile() }
     }
 
-    private fun pickImage(){
+    private fun pickImage() {
         val intent = Intent()
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
@@ -122,10 +123,9 @@ class AccountSettingsActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == RequestCode && resultCode == RESULT_OK && data!!.data != null){
+        if (requestCode == RequestCode && resultCode == RESULT_OK && data!!.data != null) {
             var imageUser = findViewById<View>(R.id.imgUser) as ImageView
             imageUri = data.data
-
             imageUser.setImageURI(imageUri)
         }
     }
@@ -135,59 +135,36 @@ class AccountSettingsActivity : AppCompatActivity() {
             //StorageFire
             mProgressBar?.setTitle("Uploading")
             mProgressBar?.show()
-            val filepath : StorageReference = FirebaseStorage.getInstance().reference.child("images/${imageUri.toString()}.jpg")
-            filepath.putFile(imageUri!!).addOnSuccessListener(){
+            val filepath: StorageReference = FirebaseStorage.getInstance().reference.child("images/${imageUri.toString()}.jpg")
+            filepath.putFile(imageUri!!).addOnSuccessListener() { task ->
+                val downloadUrl = task.uploadSessionUri
+                val url = downloadUrl.toString()
+                val uid = FirebaseAuth.getInstance().currentUser!!.uid
+                val rootRef = FirebaseDatabase.getInstance().reference
+                val uidRef = rootRef.child("Users").child(uid)
+                if (coverChecker == "cover") {
+                    val mapCoverImg = HashMap<String, Any>()
+                    mapCoverImg["cover"] = url
+                    uidRef.child("profilePhoto").setValue(mapCoverImg)
+                    coverChecker = ""
+                } else {
+                    val mapCoverImg = HashMap<String, Any>()
+                    mapCoverImg["profile"] = url
+                    uidRef.child("profilePhoto").setValue(mapCoverImg)
+                    coverChecker = ""
+                }
                 mProgressBar?.dismiss()
                 Toast.makeText(this, "File Uploaded", Toast.LENGTH_SHORT).show()
-                uploadToDataBase()
-            }.addOnFailureListener(){ pO ->
+            }.addOnFailureListener() { pO ->
                 mProgressBar?.dismiss()
                 Toast.makeText(applicationContext, pO.message, Toast.LENGTH_SHORT).show()
             }.addOnProgressListener { pO ->
-                var progress : Double = (100.0 * pO.bytesTransferred)
+                var progress: Double = (100.0 * pO.bytesTransferred)
                 mProgressBar?.setMessage("Uploaded ${progress.toInt()}%")
             }
 
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun uploadToDataBase() {
-        Toast.makeText(this, "image is uploading, please wait...", Toast.LENGTH_SHORT).show()
-
-        if(imageUri != null){
-
-            val fileRef = storageRef!!.child(System.currentTimeMillis().toString() + ".jpg")
-
-            var uploadTask: StorageTask<*>
-            uploadTask = fileRef.putFile(imageUri!!)
-
-            uploadTask.continueWithTask(Continuation<UploadTask.TaskSnapshot, Task<Uri>>{ task ->
-                if (!task.isSuccessful){
-                    task.exception?.let {
-                        throw it
-                    }
-                }
-                return@Continuation fileRef.downloadUrl
-            }).addOnCompleteListener { task ->
-                if(task.isSuccessful){
-                    val downloadUrl = task.result
-                    val url = downloadUrl.toString()
-
-                    if(coverChecker == "cover"){
-                        val mapCoverImg = HashMap<String, Any>()
-                        mapCoverImg["cover"] = url
-                        mDatabaseReference!!.updateChildren(mapCoverImg)
-                        coverChecker = ""
-                    }else{
-                        val mapCoverImg = HashMap<String, Any>()
-                        mapCoverImg["cover"] = url
-                        mDatabaseReference!!.updateChildren(mapCoverImg)
-                        coverChecker = ""
-                    }
-                }
-            }
         }
     }
 }
