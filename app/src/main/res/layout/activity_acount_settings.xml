@@ -19,7 +19,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
 
-            android:id="@+id/imgUser"
+            android:id="@+id/imgUserLogin"
             android:layout_width="match_parent"
             android:layout_height="137dp"
             android:layout_gravity="center_horizontal"

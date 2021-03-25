@@ -1,17 +1,18 @@
 package com.example.rps_rentparkingspace
 
 import android.content.Intent
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.rps_rentparkingspace.menu.AccountSettingsActivity
-import com.example.rps_rentparkingspace.menu.AddBalanceActivity
-import com.example.rps_rentparkingspace.menu.RpsActivity
-import com.example.rps_rentparkingspace.menu.SpacesActivity
+import com.example.rps_rentparkingspace.menu.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.squareup.picasso.Picasso
 
 
 private val TAG = "MainActivity"
@@ -24,6 +25,7 @@ private var tvAddBalanceScreen: TextView? = null
 private var tvAccountSetings: TextView? = null
 private var tvSpacesScreen: TextView? = null
 private var tvLogOut: TextView? = null
+private var ivImageUser: ImageView? = null
 
 class MainActivity : AppCompatActivity() {
 
@@ -40,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         tvAddBalanceScreen = findViewById<View>(R.id.lastName) as TextView
         tvLogOut = findViewById<View>(R.id.passwordUser) as TextView
         tvSpacesScreen = findViewById<View>(R.id.emailUser) as TextView
-
+        ivImageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
 
         var setName = findViewById<View>(R.id.nameUser) as TextView
         nameUser = etNameUser?.text.toString()
@@ -49,10 +51,10 @@ class MainActivity : AppCompatActivity() {
         val uidRef = rootRef.child("Users").child(uid)
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                nameUser = """${
-                    dataSnapshot.child("firstName").getValue()
-                }  ${dataSnapshot.child("lastName").getValue()}"""
+                val imgFile : String = dataSnapshot.child( "profile").value.toString()
+                nameUser = """${dataSnapshot.child("firstName").value}  ${dataSnapshot.child("lastName").value}"""
                 setName.text = nameUser
+                Picasso.get().load(imgFile).into(ivImageUser)
             }
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.d(TAG, databaseError.message)
@@ -72,3 +74,5 @@ class MainActivity : AppCompatActivity() {
             .setOnClickListener { startActivity(Intent(this, LoginActivity::class.java)) }
     }
 }
+
+

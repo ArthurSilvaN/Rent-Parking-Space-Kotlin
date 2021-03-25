@@ -14,15 +14,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.rps_rentparkingspace.MainActivity
 import com.example.rps_rentparkingspace.R
-import com.google.android.gms.tasks.Continuation
-import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.google.firebase.storage.StorageTask
-import com.google.firebase.storage.UploadTask
-import java.lang.System.currentTimeMillis
 
 
 private val TAG = "AccountSettingsActivity"
@@ -52,7 +47,7 @@ private var passwordUser: String? = null
 private const val RequestCode = 438
 private var imageUri: Uri? = null
 private var coverChecker: String? = null
-private var storageRef: StorageReference? = null
+
 
 @Suppress("DEPRECATION")
 class AccountSettingsActivity : AppCompatActivity() {
@@ -124,7 +119,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RequestCode && resultCode == RESULT_OK && data!!.data != null) {
-            var imageUser = findViewById<View>(R.id.imgUser) as ImageView
+            var imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
             imageUri = data.data
             imageUser.setImageURI(imageUri)
         }
