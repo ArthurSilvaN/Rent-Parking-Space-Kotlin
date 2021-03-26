@@ -42,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         tvAddBalanceScreen = findViewById<View>(R.id.lastName) as TextView
         tvLogOut = findViewById<View>(R.id.passwordUser) as TextView
         tvSpacesScreen = findViewById<View>(R.id.emailUser) as TextView
-        ivImageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
+        ivImageUser = findViewById<View>(R.id.imgUserMain) as ImageView
 
         var setName = findViewById<View>(R.id.nameUser) as TextView
         nameUser = etNameUser?.text.toString()
@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity() {
         val uidRef = rootRef.child("Users").child(uid)
         val valueEventListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val imgFile : String = dataSnapshot.child( "profile").value.toString()
+                val imgFile : String = dataSnapshot.child( "profilephoto").value.toString()
                 nameUser = """${dataSnapshot.child("firstName").value}  ${dataSnapshot.child("lastName").value}"""
                 setName.text = nameUser
                 Picasso.get().load(imgFile).into(ivImageUser)

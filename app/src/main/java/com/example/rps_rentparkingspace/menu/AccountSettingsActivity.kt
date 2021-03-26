@@ -18,6 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.squareup.picasso.Picasso
 
 
 private val TAG = "AccountSettingsActivity"
@@ -28,6 +29,8 @@ private var mProgressBar: ProgressDialog? = null
 private var mDatabaseReference: DatabaseReference? = null
 private var mDatabase: FirebaseDatabase? = null
 private var mAuth: FirebaseAuth? = null
+
+private var profilePhoto: String? = null
 
 private var etNameUser: TextView? = null
 private var nameUser: String? = null
@@ -58,6 +61,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         var editIMG = findViewById<View>(R.id.editImg) as TextView
         var ivBack = findViewById<View>(R.id.goBack) as ImageView
         var tvSave = findViewById<View>(R.id.save) as TextView
+        var imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
 
         var setName = findViewById<View>(R.id.firstName) as TextView
         nameUser = etNameUser?.text.toString()
@@ -84,6 +88,9 @@ class AccountSettingsActivity : AppCompatActivity() {
                 emailUser = """${dataSnapshot.child("email").value}"""
                 balanceUser = """$ ${dataSnapshot.child("balance").value}"""
                 passwordUser = """${dataSnapshot.child("password").value}"""
+                profilePhoto = """${dataSnapshot.child("profilephoto").value}"""
+
+                Picasso.get().load(profilePhoto).into(imageUser)
 
                 setName.text = nameUser
                 setLastName.text = lastNameUser
@@ -127,40 +134,36 @@ class AccountSettingsActivity : AppCompatActivity() {
 
     private fun uploadFile() {
         if (imageUri != null) {
-            //StorageFire
             mProgressBar?.setTitle("Uploading")
             mProgressBar?.show()
+            //StorageFire
             val filepath: StorageReference = FirebaseStorage.getInstance().reference.child("images/${imageUri.toString()}.jpg")
-            filepath.putFile(imageUri!!).addOnSuccessListener() { task ->
-                val downloadUrl = task.uploadSessionUri
-                val url = downloadUrl.toString()
-                val uid = FirebaseAuth.getInstance().currentUser!!.uid
-                val rootRef = FirebaseDatabase.getInstance().reference
-                val uidRef = rootRef.child("Users").child(uid)
-                if (coverChecker == "cover") {
-                    val mapCoverImg = HashMap<String, Any>()
-                    mapCoverImg["cover"] = url
-                    uidRef.child("profilePhoto").setValue(mapCoverImg)
-                    coverChecker = ""
-                } else {
-                    val mapCoverImg = HashMap<String, Any>()
-                    mapCoverImg["profile"] = url
-                    uidRef.child("profilePhoto").setValue(mapCoverImg)
-                    coverChecker = ""
-                }
-                mProgressBar?.dismiss()
-                Toast.makeText(this, "File Uploaded", Toast.LENGTH_SHORT).show()
-            }.addOnFailureListener() { pO ->
-                mProgressBar?.dismiss()
-                Toast.makeText(applicationContext, pO.message, Toast.LENGTH_SHORT).show()
-            }.addOnProgressListener { pO ->
-                var progress: Double = (100.0 * pO.bytesTransferred)
-                mProgressBar?.setMessage("Uploaded ${progress.toInt()}%")
-            }
+            filepath.putFile(imageUri!!).addOnSuccessListener { it ->
+                Log.d(TAG, "Successfully uploaded image: ${it.metadata?.path}")
 
+                filepath.downloadUrl.addOnSuccessListener {
+                    Log.d(TAG, "File Location: $it")
+
+                    savePhotoToFirebaseDatabase(it.toString())
+                    mProgressBar?.dismiss()
+                    Toast.makeText(this, "File Success Uploaded", Toast.LENGTH_SHORT).show()
+                }
+            }.addOnFailureListener {
+                Log.d(TAG, "Failed to upload image to storage: ${it.message}")
+                mProgressBar?.dismiss()
+                Toast.makeText(this, "Filed to Upload", Toast.LENGTH_SHORT).show()
+            }
         } else {
             Toast.makeText(this, "No file selected", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun savePhotoToFirebaseDatabase(profileImageUrl: String) {
+        val uid = FirebaseAuth.getInstance().currentUser!!.uid
+        val rootRef = FirebaseDatabase.getInstance().reference
+        val uidRef = rootRef.child("Users").child(uid)
+
+        uidRef.child("profilephoto").setValue(profileImageUrl)
     }
 }
 
