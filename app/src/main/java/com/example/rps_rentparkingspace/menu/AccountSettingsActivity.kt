@@ -25,11 +25,6 @@ private val TAG = "AccountSettingsActivity"
 
 private var mProgressBar: ProgressDialog? = null
 
-//Firebase references
-private var mDatabaseReference: DatabaseReference? = null
-private var mDatabase: FirebaseDatabase? = null
-private var mAuth: FirebaseAuth? = null
-
 private var profilePhoto: String? = null
 
 private var etNameUser: TextView? = null
@@ -49,7 +44,6 @@ private var passwordUser: String? = null
 
 private const val RequestCode = 438
 private var imageUri: Uri? = null
-private var coverChecker: String? = null
 
 
 @Suppress("DEPRECATION")
@@ -58,24 +52,24 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_acount_settings)
 
-        var editIMG = findViewById<View>(R.id.editImg) as TextView
-        var ivBack = findViewById<View>(R.id.goBack) as ImageView
-        var tvSave = findViewById<View>(R.id.save) as TextView
-        var imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
+        val editIMG = findViewById<View>(R.id.editImg) as TextView
+        val ivBack = findViewById<View>(R.id.goBack) as ImageView
+        val tvSave = findViewById<View>(R.id.save) as TextView
+        val imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
 
-        var setName = findViewById<View>(R.id.firstName) as TextView
+        val setName = findViewById<View>(R.id.firstName) as TextView
         nameUser = etNameUser?.text.toString()
 
-        var setLastName = findViewById<View>(R.id.lastName) as TextView
+        val setLastName = findViewById<View>(R.id.lastName) as TextView
         lastNameUser = tvLastName?.text.toString()
 
-        var setEmail = findViewById<View>(R.id.emailUser) as TextView
+        val setEmail = findViewById<View>(R.id.emailUser) as TextView
         emailUser = tvEmail?.text.toString()
 
-        var setBalance = findViewById<View>(R.id.addBalanceUser) as TextView
+        val setBalance = findViewById<View>(R.id.addBalanceUser) as TextView
         balanceUser = tvBalance?.text.toString()
 
-        var setPassword = findViewById<View>(R.id.passwordUser) as TextView
+        val setPassword = findViewById<View>(R.id.passwordUser) as TextView
         passwordUser = tvPassword?.text.toString()
 
         val uid = FirebaseAuth.getInstance().currentUser!!.uid
@@ -126,7 +120,7 @@ class AccountSettingsActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == RequestCode && resultCode == RESULT_OK && data!!.data != null) {
-            var imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
+            val imageUser = findViewById<View>(R.id.imgUserLogin) as ImageView
             imageUri = data.data
             imageUser.setImageURI(imageUri)
         }
